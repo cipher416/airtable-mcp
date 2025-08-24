@@ -1,41 +1,112 @@
-# xmcp Application
+# Airtable MCP
 
-This project was created with [create-xmcp-app](https://github.com/basementstudio/xmcp).
+An MCP (Model Context Protocol) server that provides tools for interacting with Airtable bases and schemas.
+
+## Overview
+
+This project implements an xMCP application that allows AI assistants to interact with Airtable.
+
+## Features
+
+- 🗃️ List all accessible Airtable bases
+- 📋 Retrieve detailed schema information for any base
+- 🔒 Secure authentication using Airtable API keys
+- 🚀 Built with TypeScript and xMCP framework
+- 🔧 HTTP server support for easy integration
+
+## Prerequisites
+
+- Node.js >= 20.0.0
+- Airtable API key
+- Access to Airtable bases
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd airtable-mcp
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up environment variables:
+   Create a `.env` file in the root directory with:
+
+```env
+AIRTABLE_API_KEY=your_airtable_api_key_here
+AIRTABLE_API_URL=https://api.airtable.com
+```
 
 ## Getting Started
 
-First, run the development server:
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-This will start the MCP server with the selected transport method.
+Build for production:
+
+```bash
+npm run build
+npm start
+```
+
+## Available Tools
+
+### `listBases`
+
+- **Description**: List all Airtable bases owned by the user
+- **Parameters**: None
+- **Returns**: JSON array of bases with their metadata
+
+### `getBaseSchema`
+
+- **Description**: Get the schema of a specific Airtable base
+- **Parameters**:
+  - `baseId` (string): The ID of the Airtable base
+- **Returns**: JSON object containing the base's table schemas
+
+## Scripts
+
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build the project for production
+- `npm start` - Start the production HTTP server
+- `npm run lint` - Run TypeScript type checking
 
 ## Project Structure
+
+```
+airtable-mcp/
+├── src/
+│   └── tools/
+├── package.json
+├── xmcp.config.ts           # xMCP configuration
+└── tsconfig.json           # TypeScript configuration
+```
 
 This project uses the structured approach where tools are automatically discovered from the `src/tools` directory. Each tool is defined in its own file with the following structure:
 
 ```typescript
+import { type ToolMetadata, InferSchema } from "xmcp";
 import { z } from "zod";
-import { type InferSchema } from "xmcp";
 
-// Define the schema for tool parameters
+// Define the schema for tool parameters (optional)
 export const schema = {
-  a: z.number().describe("First number to add"),
-  b: z.number().describe("Second number to add"),
+  baseId: z.string(),
 };
 
 // Define tool metadata
-export const metadata = {
-  name: "add",
-  description: "Add two numbers together",
+export const metadata: ToolMetadata = {
+  name: "getBaseSchema",
+  description: "List the schema of the base owned by the user",
   annotations: {
-    title: "Add Two Numbers",
     readOnlyHint: true,
     destructiveHint: false,
     idempotentHint: true,
@@ -43,65 +114,18 @@ export const metadata = {
 };
 
 // Tool implementation
-export default async function add({ a, b }: InferSchema<typeof schema>) {
-  return {
-    content: [{ type: "text", text: String(a + b) }],
-  };
+export default async function getBaseSchema(args: InferSchema<typeof schema>) {
+  // Implementation here
 }
 ```
 
-## Adding New Tools
+## Dependencies
 
-To add a new tool:
-
-1. Create a new `.ts` file in the `src/tools` directory
-2. Export a `schema` object defining the tool parameters using Zod
-3. Export a `metadata` object with tool information
-4. Export a default function that implements the tool logic
-
-## Building for Production
-
-To build your project for production:
-
-```bash
-npm run build
-# or
-yarn build
-# or
-pnpm build
-```
-
-This will compile your TypeScript code and output it to the `dist` directory.
-
-## Running the Server
-
-You can run the server for the transport built with:
-
-- HTTP: `node dist/http.js`
-- STDIO: `node dist/stdio.js`
-
-Given the selected transport method, you will have a custom start script added to the `package.json` file.
-
-For HTTP:
-
-```bash
-npm run start-http
-# or
-yarn start-http
-# or
-pnpm start-http
-```
-
-For STDIO:
-
-```bash
-npm run start-stdio
-# or
-yarn start-stdio
-# or
-pnpm start-stdio
-```
+- **airtable**: Official Airtable JavaScript client
+- **xmcp**: xMCP framework for building MCP servers
+- **zod**: Runtime type validation
 
 ## Learn More
 
 - [xmcp Documentation](https://xmcp.dev/docs)
+- [Airtable API Documentation](https://airtable.com/developers/web/api/introduction)
