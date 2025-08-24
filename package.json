@@ -8,9 +8,12 @@
   "scripts": {
     "build": "xmcp build",
     "dev": "xmcp dev",
-    "start": "node dist/http.js"
+    "start": "node dist/http.js",
+    "lint": "tsc --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
+    "airtable": "^0.12.2",
     "xmcp": "0.1.13",
     "zod": "3.24.4"
   },
