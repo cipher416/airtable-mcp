@@ -4,12 +4,12 @@
     "": {
       "name": "airtable-mcp",
       "dependencies": {
-        "@types/minimatch": "^6.0.0",
         "airtable": "^0.12.2",
         "xmcp": "0.1.13",
         "zod": "3.24.4",
       },
       "devDependencies": {
+        "@types/minimatch": "^6.0.0",
         "swc-loader": "^0.2.6",
       },
     },
